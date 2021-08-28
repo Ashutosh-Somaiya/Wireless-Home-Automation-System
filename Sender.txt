@@ -1,0 +1,59 @@
+#include <LiquidCrystal.h>
+int vcc=A0;
+int sensor=A1;
+int gnd=A2;
+float temp;
+int LDRpin=A3;
+int LDRValue = 0; // result of reading the analog pin
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+void setup()
+{
+Serial.begin(9600);
+pinMode(vcc,OUTPUT);
+pinMode(sensor,INPUT);
+pinMode(gnd,OUTPUT);
+digitalWrite(vcc,HIGH); // Vcc for LM35
+digitalWrite(gnd,LOW); // Ground for LM35
+lcd.begin(16, 2); // initializes the 16x2 LCD
+lcd.setCursor(2,0); // sets the cursor at column 2 row 0
+lcd.print("TEMPERATURE"); // prints temperature
+}
+void loop()
+{
+temp=analogRead(sensor); // reads the sensor output
+temp=temp*5; // converts the sensor reading to temperature
+temp=temp/10; // adds the decimal point
+lcd.setCursor(0,1); // sets cursor at column 0 row 1
+lcd.print(temp); // prints temperature in degree Celsius
+lcd.print((char)223); // prints degree sign
+lcd.print("C"); // prints letter c
+if (temp<33)
+{
+Serial.write(1);
+}
+else
+{
+Serial.write(2);
+}
+delay(5000); // 1 second delay
+LDRValue = analogRead(LDRpin); // read the value from the LDR
+Serial.println(LDRValue); // print the value to the serial port
+delay(1000);// wait a little
+if(LDRValue<100 && LDRValue>50)
+{
+Serial.write(3);
+}
+else if(LDRValue<50 && LDRValue>20)
+{
+Serial.write(4);
+}
+else if(LDRValue<20)
+{
+Serial.write(5);
+}
+else
+{
+Serial.write(6);
+}
+delay(1000);
+}

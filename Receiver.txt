@@ -1,0 +1,54 @@
+#include <LiquidCrystal.h>
+int fan=10;
+int light=11;
+float recievedvalue=0;
+int led1=8;
+int led2=9;
+int led3=13;
+void setup()
+{
+Serial.begin(9600);
+pinMode(fan,OUTPUT);
+pinMode(light,OUTPUT);
+pinMode(led1,OUTPUT);
+pinMode(led2,OUTPUT);
+Page | 63
+pinMode(led3,OUTPUT);
+}
+void loop()
+{
+if (Serial.available() > 0)
+{
+// get incoming byte:
+recievedvalue= Serial.read();
+if (recievedvalue==1)
+{
+digitalWrite(fan,LOW);
+digitalWrite(light,HIGH);
+}
+else if(recievedvalue==2)
+{
+digitalWrite(light,LOW);
+digitalWrite(fan,HIGH);
+}
+else if(recievedvalue==3)
+{
+digitalWrite(led1,HIGH);
+}
+else if(recievedvalue==4)
+{
+digitalWrite(led1,HIGH);
+digitalWrite(led2,HIGH);
+}
+else if(recievedvalue==5)
+{
+digitalWrite(led1,HIGH);
+digitalWrite(led2,HIGH);
+digitalWrite(led3,HIGH);
+}
+else
+{
+digitalWrite(led1,LOW);
+digitalWrite(led2,LOW);
+digitalWrite(led3,LOW);
+}
